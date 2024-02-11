@@ -9,16 +9,22 @@ import java.util.List;
 @Component
 public class UserDAOService {
     private static List<User> users=new ArrayList<>();
+    private static int count=0;
     static{
-        users.add(new User(1,"Adam", LocalDate.now().minusYears(25)));
-        users.add(new User(2,"Ava", LocalDate.now().minusYears(20)));
-        users.add(new User(3,"Sheldon", LocalDate.now().minusYears(30)));
+        users.add(new User(++count,"Adam", LocalDate.now().minusYears(25)));
+        users.add(new User(++count,"Ava", LocalDate.now().minusYears(20)));
+        users.add(new User(++count,"Sheldon", LocalDate.now().minusYears(30)));
     }
     public List<User> findAll(){
         return users;
     }
 
-//    public User save(User user)
+    public User save(User user){
+        user.setId(++count);
+        users.add(user);
+        return user;
+    }
+
     public User findOne(int id){
         return users.stream().filter(user->user.getId()==id).findFirst().orElse(null);
     }
