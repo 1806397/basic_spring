@@ -1,6 +1,5 @@
 package com.rest.webservices.restfulwebservices.user;
 
-import org.hibernate.annotations.NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
