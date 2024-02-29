@@ -1,5 +1,10 @@
 package com.rest.webservices.restfulwebservices.filtering;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,16 +15,26 @@ import java.util.List;
 public class FilteringController {
 
     @GetMapping("/filtering")
-    public someBean filterning(){
-        return new someBean("value1","value2","value3");
+    public MappingJacksonValue filterning(){
+        SimpleBeanPropertyFilter filter=SimpleBeanPropertyFilter.filterOutAllExcept("field1","field3");
+        FilterProvider filters=new SimpleFilterProvider().addFilter("SomeBeanFilter",filter);
+        someBean sb=new someBean("value1","value2","value3");
+        MappingJacksonValue mjv=new MappingJacksonValue(sb);
+        mjv.setFilters(filters);
+        return mjv;
     };
 
     @GetMapping("/filtering-list")
-    public List<someBean> filterningList(){
-        return Arrays.asList(
-                new someBean("value1","value2","value3"),
-                new someBean("value1","value2","value3")
+    public MappingJacksonValue filterningList(){
+        List<someBean> list=Arrays.asList(
+                new someBean("value1","value2","value2")
+                ,new someBean("value2","value3","value4")
         );
-    };
+        MappingJacksonValue mjv=new MappingJacksonValue(list);
+        SimpleBeanPropertyFilter filters=SimpleBeanPropertyFilter.filterOutAllExcept("field2","field3");
+        FilterProvider filter=new SimpleFilterProvider().addFilter("SomeBeanFilter",filters);
+        mjv.setFilters(filter);
+        return mjv;
+    }
 
 }
