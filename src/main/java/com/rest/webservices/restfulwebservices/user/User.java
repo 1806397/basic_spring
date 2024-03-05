@@ -2,6 +2,8 @@ package com.rest.webservices.restfulwebservices.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -10,12 +12,13 @@ import java.time.LocalDate;
 //User is keyword in H2
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+//    @JsonProperty("user_name")
     @Size(min=2,message = "Name should have at least 2 characters")
-    @JsonProperty("user_name")
     private String name;
+//    @JsonProperty("birth_date")
     @Past(message = "BirthDate should be in past")
-    @JsonProperty("birth_date")
     private LocalDate birthDate;
     @Override
     public String toString() {
@@ -25,6 +28,10 @@ public class User {
                 ", birthDate=" + birthDate +
                 '}';
     }
+
+    public User() {
+    }
+
     public User(Integer id, String name, LocalDate birthDate) {
         this.id = id;
         this.name = name;
