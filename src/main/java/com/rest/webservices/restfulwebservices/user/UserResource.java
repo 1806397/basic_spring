@@ -40,8 +40,15 @@ public class UserResource {
 
     @DeleteMapping(path = "/users/{id}")
     public void deleteUser(@PathVariable int id) {
-
         userRepository.deleteById(id);
+    }
+
+    @GetMapping(path = "/users/{id}/posts")
+    public List<Post> RetrievePostForUser(@PathVariable int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty())
+            throw new UserNotFoundException("id:" + id);
+       return user.get().getPost();
     }
 
     @PostMapping(path = "/users")
