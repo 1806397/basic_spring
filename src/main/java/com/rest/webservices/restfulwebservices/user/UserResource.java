@@ -6,6 +6,7 @@ import com.rest.webservices.restfulwebservices.jpa.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,8 +59,14 @@ public class UserResource {
     @GetMapping(path = "/users/{id}/posts")
     public List<Post> RetrievePostForUser(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty())
+        if (user.isEmpty()) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND);
             throw new UserNotFoundException("id:" + id);
+        }
+        if(user.get().getPost().isEmpty()){
+            ResponseEntity.status(HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("id:" + id);
+        }
         return user.get().getPost();
     }
     @PostMapping(path = "/users/{id}/posts")
